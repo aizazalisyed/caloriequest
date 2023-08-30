@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activities.GenderActivity">
+
+
+    <TextView
+        android:id="@+id/heading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="What's Your Height?"
+        android:textSize="30sp"
+        android:textColor="@color/orange"
+        android:textStyle="bold"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"/>
+
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="140dp"
+        android:layout_height="140dp"
+        android:src="@drawable/height_icon"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/heading"
+        android:layout_marginTop="120dp"/>
+
+    <NumberPicker
+        android:id="@+id/feetPicker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/icon"
+        android:layout_marginTop="50dp"
+        android:layout_marginStart="80dp"
+        />
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="ft"
+    android:textColor="@color/orange"
+    android:layout_toEndOf="@id/feetPicker"
+    android:layout_below="@id/icon"
+    android:layout_marginTop="125dp"
+    android:layout_marginStart="5dp"
+    android:textSize="22sp"/>
+
+
+    <NumberPicker
+        android:id="@+id/inchesPicker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/icon"
+        android:layout_marginTop="50dp"
+        android:layout_toStartOf="@id/inchText"
+        />
+
+    <TextView
+        android:id="@+id/inchText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="inch"
+        android:textColor="@color/orange"
+        android:layout_below="@id/icon"
+        android:layout_marginTop="125dp"
+        android:layout_marginStart="5dp"
+        android:textSize="22sp"
+        android:layout_marginEnd="50dp"
+        android:layout_alignParentEnd="true"
+        />
+
+    <Button
+        android:id="@+id/nextButton"
+        android:layout_width="250dp"
+        android:layout_height="60dp"
+        android:text="next"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="50dp"
+        android:layout_marginStart="40dp"
+        android:background="@drawable/button_background"
+        />
+</RelativeLayout>

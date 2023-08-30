@@ -11,9 +11,9 @@
         android:id="@+id/techsaLogo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Sign Up"
+        android:text="Login"
         android:textStyle="bold"
-        android:textColor="@color/grayish_blue"
+        android:textColor="@color/orange"
         style="@style/ThemeOverlay.Material3.AutoCompleteTextView.OutlinedBox"
         android:textSize="25sp"
         android:translationZ="5dp"
@@ -24,9 +24,9 @@
 
     <ImageView
         android:id="@+id/logoImage"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:src="@drawable/signup_background"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:src="@drawable/login_background"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="50dp"
         />
@@ -96,17 +96,33 @@
 
 
     <Button
-        android:id="@+id/signUpButton"
+        android:id="@+id/loginButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/passwordTextField"
         android:layout_marginTop="40dp"
-        android:text="Create Account"
+        android:text="Login"
         android:textSize="14sp"
         android:textColor="@color/black"
         android:layout_centerHorizontal="true"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
         />
+
+
+
+    <TextView
+        android:id="@+id/signUpTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/loginButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:text="Sign Up"
+        android:textSize="18sp"
+        android:textColor="@color/orange"
+        android:textStyle="bold" />
+
     <ProgressBar
         android:visibility="gone"
         android:id="@+id/progressBar"
@@ -115,4 +131,5 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="5dp"/>
+
 </RelativeLayout>

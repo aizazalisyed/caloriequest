@@ -8,6 +8,10 @@ android {
     namespace 'com.java.caloriequest'
     compileSdk 33
 
+    viewBinding {
+        enabled = true
+    }
+
     defaultConfig {
         applicationId "com.java.caloriequest"
         minSdk 24
@@ -43,4 +47,6 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    implementation 'com.mikhaellopez:circularprogressbar:3.1.0'
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 }
