@@ -4,15 +4,139 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.MainActivity">
+    tools:context=".Activities.MainActivity"
+    >
 
-  <TextView
-      android:id="@+id/calories"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="N/A"
-      android:layout_centerHorizontal="true"
-      android:layout_centerVertical="true"
-      android:textSize="20sp"/>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+<androidx.cardview.widget.CardView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardElevation="4dp"
+    android:layout_marginTop="80dp"
+    app:cardCornerRadius="10dp"
+    android:layout_marginStart="5dp"
+    android:layout_marginEnd="5dp"
+    >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="30dp"
+        android:background="@color/light_orange"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cal"
+            android:textColor="@color/black"
+            android:layout_marginTop="100dp"
+            android:layout_marginStart="50dp"
+            android:textSize="18sp"
+            android:drawableLeft="@drawable/fire_icon"
+            android:drawablePadding="2dp"
+            android:textStyle="bold"
+            />
+
+
+        <antonkozyriatskyi.circularprogressindicator.CircularProgressIndicator
+            android:id="@+id/cycleLengthCircularProgress"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:layout_centerVertical="true"
+            app:textSize="18sp"
+            app:textColor="@color/black"
+            app:dotColor="@color/orange"
+            app:progressColor="@color/orange"
+            android:textStyle="bold"
+            app:progressBackgroundStrokeWidth="12dp"
+            />
+
+        <TextView
+            android:id="@+id/cupsTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:text="0 cups"
+            android:drawableEnd="@drawable/glass_icon"
+            android:drawablePadding="5dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            />
+        <TextView
+            android:id="@+id/protienTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:text="0 protiens"
+            android:drawableEnd="@drawable/protein_icon"
+            android:drawablePadding="5dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:layout_below="@id/cupsTextView"
+            />
+
+        <TextView
+            android:id="@+id/carbsTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:text="0 carbs"
+            android:drawableEnd="@drawable/carb_icon"
+            android:drawablePadding="5dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:layout_below="@id/protienTextView"
+            />
+
+        <TextView
+            android:id="@+id/fatsTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:text="0 fats"
+            android:drawableEnd="@drawable/fats_icon"
+            android:drawablePadding="5dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:layout_below="@id/carbsTextView"
+            />
+
+        <TextView
+            android:id="@+id/calTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:text="0 cal"
+            android:drawableEnd="@drawable/fire_icon"
+            android:drawablePadding="5dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:layout_below="@id/fatsTextView"
+            />
+
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>
+
+
+    </RelativeLayout>
+    </ScrollView>
 </RelativeLayout>

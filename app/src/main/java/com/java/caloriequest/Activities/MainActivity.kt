@@ -31,7 +31,6 @@ class MainActivity : AppCompatActivity() {
         val activityLevelFactor = sharedPreferences.getFloat("activityLevelFactor", 1.55f) // Default to moderate activity level
 
         val maintenanceCalories = calculateMaintenanceCalories(age, heightFeet, heightInches, weight, activityLevelFactor)
-        binding.calories.text = maintenanceCalories.toString()
 
     }
 
