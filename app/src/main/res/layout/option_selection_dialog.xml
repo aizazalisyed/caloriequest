@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="20dp"
+    >
+
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/app_icon"
+        />
+
+    <TextView
+        android:id="@+id/heading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/icon"
+        android:text="Calorie Quest"
+        android:textStyle="bold"
+        android:textColor="@color/orange"
+        android:textSize="20dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"/>
+
+<TextView
+    android:id="@+id/camera_option"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Search Calories with the Image"
+    android:layout_below="@id/heading"
+    android:layout_marginTop="40dp"
+    android:layout_marginStart="10dp"
+    android:drawableStart="@drawable/camera_icon"
+    android:drawablePadding="5dp"
+    android:textColor="@color/black"
+    android:textSize="16sp"
+    />
+
+    <TextView
+        android:id="@+id/search_option"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Search Calories By Manually Typing"
+        android:layout_below="@id/camera_option"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"
+        android:drawableStart="@drawable/searching_icon"
+        android:drawablePadding="5dp"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:drawableTint="@color/orange"
+        android:layout_marginBottom="50dp"
+        />
+
+</RelativeLayout>

@@ -2,6 +2,7 @@ package com.java.caloriequest.Activities
 
 import android.app.Activity
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -13,12 +14,15 @@ class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
     private lateinit var auth: FirebaseAuth
+    private lateinit var sharedPreferences: SharedPreferences
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        sharedPreferences = getSharedPreferences("CaloriesPrefs", MODE_PRIVATE)
 
         auth = FirebaseAuth.getInstance()
 
@@ -44,8 +48,17 @@ class LoginActivity : AppCompatActivity() {
                                     // For example, start MainActivity
                                     // val intent = Intent(this, MainActivity::class.java)
                                     // startActivity(intent)
-                                    switchActivity(MainActivity::class.java)
-                                    finish()
+                                    val age = sharedPreferences.getInt("age", 0)
+
+                                    if(age.equals(0)){
+                                        switchActivity(GenderActivity::class.java)
+                                        finish()
+                                    }else
+                                    {
+                                        switchActivity(MainActivity::class.java)
+                                        finish()
+
+                                    }
 
                                 } else {
                                     showToast("Please verify your email")
@@ -63,7 +76,7 @@ class LoginActivity : AppCompatActivity() {
         }
 
         binding.signUpTextView.setOnClickListener {
-            switchActivity(GenderActivity::class.java)
+            switchActivity(SignUpActivity::class.java)
         }
 
 

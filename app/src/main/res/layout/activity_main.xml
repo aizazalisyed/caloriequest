@@ -5,11 +5,27 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Activities.MainActivity"
+    android:background="#f2f1f0"
     >
+
+    <Toolbar
+        android:id="@+id/toolBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:background="@color/orange"
+        android:title="Calorie Quest"
+        android:titleTextColor="@color/white"
+        android:paddingTop="30dp"
+        android:paddingBottom="20dp"
+        />
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolBar"
+        android:layout_marginTop="20dp"
+        >
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -17,30 +33,32 @@
         >
 
 <androidx.cardview.widget.CardView
+    android:id="@+id/cardViewCalories"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardElevation="4dp"
-    android:layout_marginTop="80dp"
     app:cardCornerRadius="10dp"
-    android:layout_marginStart="5dp"
-    android:layout_marginEnd="5dp"
+    android:layout_marginStart="10dp"
+    android:layout_marginEnd="10dp"
+    android:layout_marginTop="10dp"
     >
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="30dp"
-        android:background="@color/light_orange"
         >
 
         <TextView
+            android:id="@+id/calTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Cal"
+            android:text="/ 1975 Cal"
             android:textColor="@color/black"
-            android:layout_marginTop="100dp"
-            android:layout_marginStart="50dp"
-            android:textSize="18sp"
+            android:layout_marginTop="80dp"
+            android:layout_marginEnd="35dp"
+            android:layout_alignParentEnd="true"
+            android:textSize="12sp"
             android:drawableLeft="@drawable/fire_icon"
             android:drawablePadding="2dp"
             android:textStyle="bold"
@@ -58,17 +76,17 @@
             app:progressColor="@color/orange"
             android:textStyle="bold"
             app:progressBackgroundStrokeWidth="12dp"
+            android:layout_alignParentEnd="true"
             />
 
         <TextView
             android:id="@+id/cupsTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
+            android:textSize="14sp"
             android:text="0 cups"
-            android:drawableEnd="@drawable/glass_icon"
+            android:drawableStart="@drawable/glass_icon"
             android:drawablePadding="5dp"
-            android:layout_alignParentEnd="true"
             android:layout_marginTop="10dp"
             android:textColor="@color/black"
             android:textStyle="bold"
@@ -77,11 +95,10 @@
             android:id="@+id/protienTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
+            android:textSize="14sp"
             android:text="0 protiens"
-            android:drawableEnd="@drawable/protein_icon"
+            android:drawableStart="@drawable/protein_icon"
             android:drawablePadding="5dp"
-            android:layout_alignParentEnd="true"
             android:layout_marginTop="10dp"
             android:textColor="@color/black"
             android:textStyle="bold"
@@ -92,11 +109,10 @@
             android:id="@+id/carbsTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
+            android:textSize="14sp"
             android:text="0 carbs"
-            android:drawableEnd="@drawable/carb_icon"
+            android:drawableStart="@drawable/carb_icon"
             android:drawablePadding="5dp"
-            android:layout_alignParentEnd="true"
             android:layout_marginTop="10dp"
             android:textColor="@color/black"
             android:textStyle="bold"
@@ -107,34 +123,287 @@
             android:id="@+id/fatsTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
+            android:textSize="14sp"
             android:text="0 fats"
-            android:drawableEnd="@drawable/fats_icon"
+            android:drawableStart="@drawable/fats_icon"
             android:drawablePadding="5dp"
-            android:layout_alignParentEnd="true"
             android:layout_marginTop="10dp"
             android:textColor="@color/black"
             android:textStyle="bold"
             android:layout_below="@id/carbsTextView"
             />
 
-        <TextView
-            android:id="@+id/calTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:text="0 cal"
-            android:drawableEnd="@drawable/fire_icon"
-            android:drawablePadding="5dp"
-            android:layout_alignParentEnd="true"
-            android:layout_marginTop="10dp"
-            android:textColor="@color/black"
-            android:textStyle="bold"
-            android:layout_below="@id/fatsTextView"
-            />
-
     </RelativeLayout>
 </androidx.cardview.widget.CardView>
+
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardViewBreakFast"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            app:cardCornerRadius="10dp"
+            android:layout_below="@id/cardViewCalories"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            app:cardElevation="4dp"
+            >
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingBottom="20dp"
+                android:paddingTop="20dp"
+                >
+
+                <ImageView
+                    android:id="@+id/addBreakFastButton"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/plus_icon"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="20dp"
+                    />
+
+                <ImageView
+                    android:id="@+id/breakFastIcon"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:src="@drawable/breakfast_icon"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="10dp"
+                    />
+
+            <TextView
+                android:id="@+id/breakFastHeading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:text="Break Fast"
+                android:layout_toEndOf="@id/breakFastIcon"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="30dp"
+                />
+                <TextView
+                    android:id="@+id/breakfastCalTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:text="0 cal"
+                    android:drawableEnd="@drawable/fire_icon"
+                    android:drawablePadding="5dp"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:layout_below="@id/breakFastHeading"
+                    android:layout_alignStart="@id/breakFastHeading"
+                    />
+
+            </RelativeLayout>
+        </androidx.cardview.widget.CardView>
+
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardViewLunch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            app:cardCornerRadius="10dp"
+            android:layout_below="@id/cardViewBreakFast"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            app:cardElevation="4dp"
+            >
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingBottom="20dp"
+                android:paddingTop="20dp"
+                >
+
+                <ImageView
+                    android:id="@+id/addLunchButton"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/plus_icon"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="20dp"
+                    />
+                <ImageView
+                    android:id="@+id/lunchIcon"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:src="@drawable/lunch_icon"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="10dp"
+                    />
+
+                <TextView
+                    android:id="@+id/lunchHeading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:text="Lunch"
+                    android:layout_toEndOf="@id/lunchIcon"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="30dp"
+                    />
+                <TextView
+                    android:id="@+id/lunchCalTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:text="0 cal"
+                    android:drawableEnd="@drawable/fire_icon"
+                    android:drawablePadding="5dp"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:layout_below="@id/lunchHeading"
+                    android:layout_alignStart="@id/lunchHeading"
+                    />
+
+            </RelativeLayout>
+        </androidx.cardview.widget.CardView>
+
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardViewDinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            app:cardCornerRadius="10dp"
+            android:layout_below="@id/cardViewLunch"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            app:cardElevation="4dp"
+            >
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingBottom="20dp"
+                android:paddingTop="20dp"
+                >
+
+                <ImageView
+                    android:id="@+id/addDinnerButton"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/plus_icon"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="20dp"
+                    />
+
+                <ImageView
+                    android:id="@+id/dinnerIcon"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:src="@drawable/dinner_icon"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="10dp"
+                    />
+
+                <TextView
+                    android:id="@+id/dinnerHeading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:text="Dinner"
+                    android:layout_toEndOf="@id/dinnerIcon"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="30dp"
+                    />
+                <TextView
+                    android:id="@+id/dinnerCalTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:text="0 cal"
+                    android:drawableEnd="@drawable/fire_icon"
+                    android:drawablePadding="5dp"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:layout_below="@id/dinnerHeading"
+                    android:layout_alignStart="@id/dinnerHeading"
+                    />
+
+            </RelativeLayout>
+        </androidx.cardview.widget.CardView>
+
+
+
+        <androidx.cardview.widget.CardView
+            android:layout_marginBottom="50dp"
+            android:id="@+id/cardViewWater"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            app:cardCornerRadius="10dp"
+            android:layout_below="@id/cardViewDinner"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            app:cardElevation="4dp"
+            >
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingBottom="20dp"
+                android:paddingTop="20dp"
+                >
+
+                <ImageView
+                    android:id="@+id/addWaterButton"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/plus_icon"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="20dp"
+                    />
+
+                <ImageView
+                    android:id="@+id/waterIcon"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:src="@drawable/water_icon"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="10dp"
+                    />
+
+                <TextView
+                    android:id="@+id/waterHeading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:text="Cups of Water"
+                    android:layout_toEndOf="@id/waterIcon"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="30dp"
+                    />
+                <TextView
+                    android:id="@+id/waterCalTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:text="0 cups"
+                    android:drawableEnd="@drawable/glass_icon"
+                    android:drawablePadding="5dp"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:layout_below="@id/waterHeading"
+                    android:layout_alignStart="@id/waterHeading"
+                    />
+
+            </RelativeLayout>
+        </androidx.cardview.widget.CardView>
 
 
     </RelativeLayout>
