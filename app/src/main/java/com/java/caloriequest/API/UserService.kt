@@ -1,10 +1,12 @@
-package com.java.caloriequest.Activities
+package com.java.caloriequest.API
 
 
+import com.java.caloriequest.model.ImageSegmentationResponse
+import com.java.caloriequest.model.NutritionResponse
+import com.java.caloriequest.model.NutritionalInfoResponse
+import okhttp3.MultipartBody
 import retrofit2.Call
-import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface UserService {
 
@@ -13,5 +15,19 @@ interface UserService {
         @Query("query") query: String,
         @Header("X-Api-Key") apiKey: String
     ): Call<NutritionResponse>
+
+
+    @Multipart
+    @POST("image/segmentation/complete")
+    fun segmentImage(
+        @Part image: MultipartBody.Part,
+        @Header("Authorization") authorization: String
+    ): Call<ImageSegmentationResponse>
+
+    @POST("recipe/nutritionalInfo")
+    fun getNutritionalInfo(
+        @Body request: NutritionalInfoRequest,
+        @Header("Authorization") authorization: String
+    ): Call<NutritionalInfoResponse>
 
 }
