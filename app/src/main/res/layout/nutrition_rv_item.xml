@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:padding="20dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:orientation="horizontal"
+        >
+
+        <TextView
+            android:textAlignment="center"
+            android:id="@+id/itemName"
+            android:textSize="12sp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:text="burger"
+            />
+
+        <TextView
+            android:textAlignment="center"
+            android:id="@+id/servingSize"
+            android:textSize="12sp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="100g"
+            android:layout_marginStart="13dp"
+            android:textColor="@color/black"
+            />
+
+        <TextView
+            android:textAlignment="center"
+            android:id="@+id/calories"
+            android:textSize="12sp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="200"
+            android:layout_marginStart="13dp"
+            android:textColor="@color/black"
+            />
+
+        <TextView
+            android:textAlignment="center"
+            android:id="@+id/fat"
+            android:textSize="12sp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="30g"
+            android:layout_marginStart="13dp"
+            android:textColor="@color/black"
+            />
+
+        <TextView
+            android:textAlignment="center"
+            android:id="@+id/carb"
+            android:textSize="12sp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="140g"
+            android:layout_marginStart="13dp"
+            android:textColor="@color/black"
+            />
+        <TextView
+            android:textAlignment="center"
+            android:id="@+id/protien"
+            android:textSize="12sp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="100g"
+            android:layout_marginStart="13dp"
+            android:textColor="@color/black"
+            />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/grayish_blue"
+        android:layout_below="@id/linearLayout"/>
+
+</RelativeLayout>

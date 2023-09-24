@@ -1,6 +1,7 @@
 package com.java.caloriequest.Activities
 
 data class Item(
+    val name : String,
     val serving_size_g: Double,
     val calories: Double,
     val protein_g: Double,

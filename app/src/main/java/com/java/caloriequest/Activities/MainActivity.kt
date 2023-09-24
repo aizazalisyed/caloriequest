@@ -19,9 +19,7 @@ import com.java.caloriequest.API.RetrofitClient
 import com.java.caloriequest.R
 import com.java.caloriequest.databinding.ActivityMainBinding
 import com.java.caloriequest.model.ImageSegmentationResponse
-import com.java.caloriequest.model.NutritionResponse
 import com.java.caloriequest.model.NutritionalInfoResponse
-import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -56,14 +54,14 @@ class MainActivity : AppCompatActivity() {
         binding.calTextView.text = "/ $maintenanceCalories cal"
 
         binding.addBreakFastButton.setOnClickListener {
-            showOptionDialog()
+            showOptionDialog("BreakFast")
         }
 
         binding.addLunchButton.setOnClickListener {
-            showOptionDialog()
+            showOptionDialog("Lunch")
         }
         binding.addDinnerButton.setOnClickListener {
-            showOptionDialog()
+            showOptionDialog("Dinner")
         }
 
         binding.addWaterButton.setOnClickListener {
@@ -73,7 +71,7 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    private fun showOptionDialog() {
+    private fun showOptionDialog(category: String) {
 
         val dialogView = LayoutInflater.from(this).inflate(R.layout.option_selection_dialog, null)
         val builder = AlertDialog.Builder(this)
@@ -91,8 +89,9 @@ class MainActivity : AppCompatActivity() {
         }
 
         searchOption.setOnClickListener {
-
-            apiCall()
+            val intent = Intent(this, QueryNutritionActivity::class.java)
+            intent.putExtra("category", category) // Pass the category string
+            startActivity(intent)
             dialog.dismiss()
         }
     }
@@ -139,24 +138,7 @@ class MainActivity : AppCompatActivity() {
         return maintenanceCalories
     }
 
-    fun apiCall(){
-        RetrofitClient().getUserService()?.getNutritionInfo("10oz onion and a tomato","OY5GqRA9rgiY2XY432YRVg==VlbGgAMGMcAncyzS")
-            ?.enqueue(
-                object  : retrofit2.Callback<NutritionResponse>{
-                    override fun onResponse(
-                        call: Call<NutritionResponse>,
-                        response: Response<NutritionResponse>,
-                    ) {
-                        if(response.isSuccessful){
 
-                        }
-                    }
-
-                    override fun onFailure(call: Call<NutritionResponse>, t: Throwable) {
-
-                    }
-                })
-    }
 
 
     private fun requestCameraPermission() {
