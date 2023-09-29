@@ -1,5 +1,6 @@
 package com.java.caloriequest.Activities
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -85,8 +86,90 @@ class QueryNutritionActivity : AppCompatActivity() {
                 val userCollection = firestore.collection("users").document(userUid)
                 val categoryCollection = userCollection.collection(category)
 
-                var dataSavedSuccessfully = false
+                // Fetch the existing total nutrition data from Firestore
+                userCollection.get()
+                    .addOnSuccessListener { documentSnapshot ->
+                        if (documentSnapshot.exists()) {
+                            val existingTotalNutritionData = documentSnapshot.toObject(TotalNutritionData::class.java)
+                            if (existingTotalNutritionData != null) {
+                                // Update total nutrition data with new nutrition facts
+                                for (nutritionFact in nutritionList) {
+                                    existingTotalNutritionData.totalCalories += nutritionFact.calories.toDouble()
+                                    existingTotalNutritionData.totalProtein += nutritionFact.protein.toDouble()
+                                    existingTotalNutritionData.totalFats += nutritionFact.Fats.toDouble()
+                                    existingTotalNutritionData.totalCarbs += nutritionFact.carb.toDouble()
+                                }
 
+                                // Save the updated total nutrition data back to Firestore
+                                userCollection.set(existingTotalNutritionData)
+                                    .addOnSuccessListener {
+                                        // Data saved successfully
+                                        Toast.makeText(
+                                            this@QueryNutritionActivity,
+                                            "Nutrition data saved successfully",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
+                                    .addOnFailureListener { e ->
+                                        // Handle failure to save data
+                                        Toast.makeText(
+                                            this@QueryNutritionActivity,
+                                            "Failed to save nutrition data",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
+                            } else {
+                                // Handle the case where existingTotalNutritionData is null
+                                Toast.makeText(
+                                    this@QueryNutritionActivity,
+                                    "Failed to fetch existing nutrition data",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        } else {
+                            // Document doesn't exist, create a new total nutrition data
+                            // Initialize a new TotalNutritionData object
+                            val newTotalNutritionData = TotalNutritionData()
+
+                            // Update the new total nutrition data with the new nutrition facts
+                            for (nutritionFact in nutritionList) {
+                                newTotalNutritionData.totalCalories += nutritionFact.calories.toDouble()
+                                newTotalNutritionData.totalProtein += nutritionFact.protein.toDouble()
+                                newTotalNutritionData.totalFats += nutritionFact.Fats.toDouble()
+                                newTotalNutritionData.totalCarbs += nutritionFact.carb.toDouble()
+                            }
+
+                            // Save the new total nutrition data to Firestore
+                            userCollection.set(newTotalNutritionData)
+                                .addOnSuccessListener {
+                                    // Data saved successfully
+                                    Toast.makeText(
+                                        this@QueryNutritionActivity,
+                                        "Nutrition data saved successfully",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                                .addOnFailureListener { e ->
+                                    // Handle failure to save data
+                                    Toast.makeText(
+                                        this@QueryNutritionActivity,
+                                        "Failed to save nutrition data",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                        }
+                    }
+                    .addOnFailureListener { e ->
+                        // Handle failure to fetch data
+                        Toast.makeText(
+                            this@QueryNutritionActivity,
+                            "Failed to fetch existing nutrition data",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+
+                // Save individual nutrition data to the "categoryCollection" as before
+                var dataSavedSuccessfully = false
                 for (nutritionFact in nutritionList) {
                     val nutritionData = NutritionData(
                         name = nutritionFact.foodName,
@@ -104,23 +187,7 @@ class QueryNutritionActivity : AppCompatActivity() {
                         .addOnFailureListener { e ->
                             dataSavedSuccessfully = false
                         }
-
-                    // Update total nutrition data
-                    totalNutritionData.totalCalories += nutritionFact.calories.toDouble()
-                    totalNutritionData.totalProtein += nutritionFact.protein.toDouble()
-                    totalNutritionData.totalFats += nutritionFact.Fats.toDouble()
-                    totalNutritionData.totalCarbs += nutritionFact.carb.toDouble()
                 }
-
-                // Save total nutrition data to Firestore
-                userCollection.set(totalNutritionData)
-                    .addOnSuccessListener {
-                        // Data saved successfully
-                        dataSavedSuccessfully = true
-                    }
-                    .addOnFailureListener { e ->
-                        dataSavedSuccessfully = false
-                    }
 
                 // Show the toast message based on the flag
                 if (dataSavedSuccessfully) {
@@ -137,9 +204,10 @@ class QueryNutritionActivity : AppCompatActivity() {
                     Toast.LENGTH_SHORT
                 ).show()
             }
-
+            startActivity(Intent(this@QueryNutritionActivity, MainActivity::class.java))
             finish()
         }
+
     }
 
     override fun onSupportNavigateUp(): Boolean {

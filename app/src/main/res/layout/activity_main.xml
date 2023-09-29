@@ -160,7 +160,7 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:src="@drawable/plus_icon"
-                    android:layout_centerVertical="true"
+                  android:layout_marginTop="30dp"
                     android:layout_alignParentEnd="true"
                     android:layout_marginEnd="20dp"
                     />
@@ -200,6 +200,18 @@
                     android:layout_alignStart="@id/breakFastHeading"
                     />
 
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/breakFastRecyclerView"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/breakfastCalTextView"
+                    android:layout_marginTop="25dp"
+                    tools:listitem="@layout/nutrition_record_rv_item"
+                    android:visibility="gone"
+                    android:focusable="false"
+                    />
+
             </RelativeLayout>
         </androidx.cardview.widget.CardView>
 
@@ -227,7 +239,7 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:src="@drawable/plus_icon"
-                    android:layout_centerVertical="true"
+                    android:layout_marginTop="30dp"
                     android:layout_alignParentEnd="true"
                     android:layout_marginEnd="20dp"
                     />
@@ -266,6 +278,18 @@
                     android:layout_alignStart="@id/lunchHeading"
                     />
 
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/lunchRecyclerView"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/lunchCalTextView"
+                    android:layout_marginTop="25dp"
+                    tools:listitem="@layout/nutrition_record_rv_item"
+                    android:visibility="gone"
+                    android:focusable="false"
+                    />
+
             </RelativeLayout>
         </androidx.cardview.widget.CardView>
 
@@ -293,7 +317,7 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:src="@drawable/plus_icon"
-                    android:layout_centerVertical="true"
+                    android:layout_marginTop="30dp"
                     android:layout_alignParentEnd="true"
                     android:layout_marginEnd="20dp"
                     />
@@ -331,6 +355,18 @@
                     android:textStyle="bold"
                     android:layout_below="@id/dinnerHeading"
                     android:layout_alignStart="@id/dinnerHeading"
+                    />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/dinnerRecyclerView"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/dinnerCalTextView"
+                    android:layout_marginTop="25dp"
+                    tools:listitem="@layout/nutrition_record_rv_item"
+                    android:visibility="gone"
+                    android:focusable="false"
                     />
 
             </RelativeLayout>

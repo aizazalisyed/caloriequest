@@ -1,5 +1,6 @@
 package com.java.caloriequest.Activities
 
+import NutritionDataAdapter
 import android.app.AlertDialog
 import android.content.Intent
 import android.content.SharedPreferences
@@ -9,17 +10,23 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.java.caloriequest.API.NutritionalInfoRequest
 import com.java.caloriequest.API.RetrofitClient
 import com.java.caloriequest.R
 import com.java.caloriequest.databinding.ActivityMainBinding
 import com.java.caloriequest.model.ImageSegmentationResponse
+import com.java.caloriequest.model.NutritionItem
 import com.java.caloriequest.model.NutritionalInfoResponse
+import com.java.caloriequest.model.TotalNutritionData
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -35,12 +42,20 @@ class MainActivity : AppCompatActivity() {
     private lateinit var sharedPreferences: SharedPreferences
     private val CAMERA_REQUEST_CODE = 123
     private val CAMERA_PERMISSION_CODE = 101
+    private lateinit var auth: FirebaseAuth
+    private lateinit var firestore: FirebaseFirestore
+    private lateinit var nutritionAdapterBreakFast: NutritionDataAdapter
+    private lateinit var nutritionAdapterLunch: NutritionDataAdapter
+    private lateinit var nutritionAdapterDinner: NutritionDataAdapter
+    var maxCalories : Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        auth = FirebaseAuth.getInstance()
+        firestore = FirebaseFirestore.getInstance()
 
         sharedPreferences = getSharedPreferences("CaloriesPrefs", MODE_PRIVATE)
         val age = sharedPreferences.getInt("age", 0)
@@ -68,6 +83,151 @@ class MainActivity : AppCompatActivity() {
             showWaterIntakeDialog()
         }
 
+        // Initialize RecyclerView and its adapter
+        nutritionAdapterBreakFast = NutritionDataAdapter(emptyList())
+        binding.breakFastRecyclerView.layoutManager = LinearLayoutManager(this)
+        binding.breakFastRecyclerView.adapter = nutritionAdapterBreakFast
+
+        nutritionAdapterLunch = NutritionDataAdapter(emptyList())
+        binding.lunchRecyclerView.layoutManager = LinearLayoutManager(this)
+        binding.lunchRecyclerView.adapter = nutritionAdapterLunch
+
+        nutritionAdapterDinner = NutritionDataAdapter(emptyList())
+        binding.dinnerRecyclerView.layoutManager = LinearLayoutManager(this)
+        binding.dinnerRecyclerView.adapter = nutritionAdapterDinner
+
+
+
+        // Retrieve "BreakFast" data from Firestore
+        val userUid = auth.currentUser!!.uid
+        val userCollection = firestore.collection("users").document(userUid)
+        val categoryCollectionBreakFast = userCollection.collection("BreakFast")
+        val categoryCollectionLunch = userCollection.collection("Lunch")
+        val categoryCollectionDinner = userCollection.collection("Dinner")
+
+        categoryCollectionBreakFast.addSnapshotListener { snapshot, exception ->
+            if (exception != null) {
+                // Handle error
+                return@addSnapshotListener
+            }
+
+            if (snapshot != null) {
+
+                binding.breakFastRecyclerView.visibility = View.VISIBLE
+                val nutritionItems = mutableListOf<NutritionItem>()
+
+                for (document in snapshot.documents) {
+                    val nutritionData = document.toObject(NutritionItem::class.java)
+                    nutritionData?.let { nutritionItems.add(it) }
+                }
+
+                // Calculate the sum of calories
+                val totalCalories = nutritionItems.sumBy { it.calories.toInt() }
+
+                // Set the total calories in breakfastCalTextView
+                binding.breakfastCalTextView.text = "$totalCalories cal"
+
+                // Update RecyclerView with retrieved data
+                nutritionAdapterBreakFast.updateData(nutritionItems)
+            }
+        }
+
+        categoryCollectionLunch.addSnapshotListener { snapshot, exception ->
+            if (exception != null) {
+                // Handle error
+                return@addSnapshotListener
+            }
+
+            if (snapshot != null) {
+
+                binding.lunchRecyclerView.visibility = View.VISIBLE
+                val nutritionItems = mutableListOf<NutritionItem>()
+
+                for (document in snapshot.documents) {
+                    val nutritionData = document.toObject(NutritionItem::class.java)
+                    nutritionData?.let { nutritionItems.add(it) }
+                }
+
+                // Calculate the sum of calories
+                val totalCalories = nutritionItems.sumBy { it.calories.toInt() }
+
+                // Set the total calories in breakfastCalTextView
+                binding.lunchCalTextView.text = "$totalCalories cal"
+
+                // Update RecyclerView with retrieved data
+                nutritionAdapterLunch.updateData(nutritionItems)
+            }
+        }
+
+        categoryCollectionDinner.addSnapshotListener { snapshot, exception ->
+            if (exception != null) {
+                // Handle error
+                return@addSnapshotListener
+            }
+
+            if (snapshot != null) {
+
+                binding.dinnerRecyclerView.visibility = View.VISIBLE
+                val nutritionItems = mutableListOf<NutritionItem>()
+
+                for (document in snapshot.documents) {
+                    val nutritionData = document.toObject(NutritionItem::class.java)
+                    nutritionData?.let { nutritionItems.add(it) }
+                }
+
+                // Calculate the sum of calories
+                val totalCalories = nutritionItems.sumBy { it.calories.toInt() }
+
+                // Set the total calories in breakfastCalTextView
+                binding.dinnerCalTextView.text = "$totalCalories cal"
+
+                // Update RecyclerView with retrieved data
+                nutritionAdapterDinner.updateData(nutritionItems)
+            }
+        }
+
+        retrieveTotalNutritionData()
+    }
+
+    private fun retrieveTotalNutritionData() {
+        val currentUser = auth.currentUser
+        if (currentUser != null) {
+            val userUid = currentUser.uid
+            val userCollection = firestore.collection("users").document(userUid)
+
+            // Fetch the existing total nutrition data from Firestore
+            userCollection.get()
+                .addOnSuccessListener { documentSnapshot ->
+                    if (documentSnapshot.exists()) {
+                        val totalNutritionData = documentSnapshot.toObject(TotalNutritionData::class.java)
+                        if (totalNutritionData != null) {
+                            // Here, you can use the totalNutritionData as needed
+                            // For example, you can access its properties like this:
+                            val totalCalories = totalNutritionData.totalCalories
+                            val totalProtein = totalNutritionData.totalProtein
+                            val totalFats = totalNutritionData.totalFats
+                            val totalCarbs = totalNutritionData.totalCarbs
+
+                            binding.cycleLengthCircularProgress.setProgress(totalCalories, maxCalories!!.toDouble())
+                            binding.protienTextView.text = totalProtein.toString()
+                            binding.fatsTextView.text = totalFats.toString()
+                            binding.carbsTextView.text = totalCarbs.toString()
+
+                            // Update your UI or perform any other actions with the data
+                        } else {
+                            // Handle the case where totalNutritionData is null
+                        }
+                    } else {
+                        // Document doesn't exist, handle this case based on your requirements
+                    }
+                }
+                .addOnFailureListener { e ->
+                    // Handle failure to fetch data
+                    // You can add a Toast message or other error handling here
+                }
+        } else {
+            // User is not logged in, handle this case based on your requirements
+        }
     }
 
 
@@ -135,6 +295,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         val maintenanceCalories = (bmr * activityLevelFactor).toInt()
+        maxCalories = maintenanceCalories
         return maintenanceCalories
     }
 
