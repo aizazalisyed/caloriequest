@@ -7,7 +7,7 @@ data class NutritionalInfoResponse(
     val imageId: Int,
     val nutritional_info: NutritionalInfo,
     val nutritional_info_per_item: List<NutritionalInfoPerItem>,
-    val serving_size: Int
+    val serving_size: Double
 )
 
 data class NutritionalInfo(
@@ -27,5 +27,5 @@ data class NutritionalInfoPerItem(
     val hasNutritionalInfo: Boolean,
     val id: Int,
     val nutritional_info: NutritionalInfo,
-    val serving_size: Int
+    val serving_size: Double
 )

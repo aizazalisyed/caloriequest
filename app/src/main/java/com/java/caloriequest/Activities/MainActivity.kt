@@ -49,6 +49,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var nutritionAdapterDinner: NutritionDataAdapter
     var maxCalories : Int? = null
 
+    lateinit var category : String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -246,6 +248,8 @@ class MainActivity : AppCompatActivity() {
         cameraOption.setOnClickListener {
             openCamera() // Open the camera when the "Camera" option is clicked
             dialog.dismiss()
+
+            this.category = category
         }
 
         searchOption.setOnClickListener {
@@ -370,7 +374,11 @@ class MainActivity : AppCompatActivity() {
             val photo = data?.extras?.get("data") as Bitmap // The captured image
             val imageFile = saveBitmapToFile(photo) // Convert Bitmap to File
             // TODO: Send the imageFile to the API for segmentation
-            sendImageToAPI(imageFile)
+            // Start ImageNutritionActivity and pass imageFile and category
+            val intent = Intent(this, ImageNutritionActivity::class.java)
+            intent.putExtra("imageFile", imageFile)
+            intent.putExtra("category", category)
+            startActivity(intent)
         }
     }
 
@@ -384,72 +392,6 @@ class MainActivity : AppCompatActivity() {
         outputStream.close()
 
         return imageFile
-    }
-
-    private fun sendImageToAPI(imageFile: File) {
-        // Use Retrofit to send the imageFile to your API for segmentation
-        val imageRequestBody = RequestBody.create("image/*".toMediaTypeOrNull(), imageFile)
-        val imagePart = MultipartBody.Part.createFormData("image", imageFile.name, imageRequestBody)
-
-        val userService = RetrofitClient().getUserService2() // Use your Retrofit service
-        val authorizationHeader = "Bearer e97206646cbd2ff40afdc1c7d1c356a9448424fe" // Replace with your actual API token
-        userService?.segmentImage(imagePart, authorizationHeader)?.enqueue(
-            object : Callback<ImageSegmentationResponse> {
-                override fun onResponse(
-                    call: Call<ImageSegmentationResponse>,
-                    response: Response<ImageSegmentationResponse>
-                ) {
-                    if (response.isSuccessful) {
-                        val imageSegmentationResponse = response.body()
-                        if (imageSegmentationResponse != null) {
-                            val imageId = imageSegmentationResponse.imageId
-                            // TODO: Get nutritional information based on the imageId
-                            getNutritionalInfo(imageId)
-                        } else {
-                            // Handle the case where imageSegmentationResponse is null
-                        }
-                    } else {
-                        // Handle API error
-                    }
-                }
-
-                override fun onFailure(call: Call<ImageSegmentationResponse>, t: Throwable) {
-                    // Handle API call failure
-                }
-            }
-        )
-    }
-
-    private fun getNutritionalInfo(imageId: Int) {
-        val userService = RetrofitClient().getUserService2() // Use your Retrofit service
-        val nutritionalInfoRequest = NutritionalInfoRequest(imageId)
-
-        val authorizationHeader = "Bearer e97206646cbd2ff40afdc1c7d1c356a9448424fe" // Replace with your actual API token
-
-        userService?.getNutritionalInfo(nutritionalInfoRequest, authorizationHeader)?.enqueue(
-            object : Callback<NutritionalInfoResponse> {
-                override fun onResponse(
-                    call: Call<NutritionalInfoResponse>,
-                    response: Response<NutritionalInfoResponse>
-                ) {
-                    if (response.isSuccessful) {
-                        val nutritionalInfoResponse = response.body()
-                        if (nutritionalInfoResponse != null) {
-                            // Handle the nutritional information response
-                            println(nutritionalInfoResponse)
-                        } else {
-                            // Handle the case where nutritionalInfoResponse is null
-                        }
-                    } else {
-                        // Handle API error
-                    }
-                }
-
-                override fun onFailure(call: Call<NutritionalInfoResponse>, t: Throwable) {
-                    // Handle API call failure
-                }
-            }
-        )
     }
 
 }
