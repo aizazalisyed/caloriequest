@@ -19,12 +19,15 @@
         />
 
     <ProgressBar
-        android:visibility="gone"
+
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:id="@+id/progressBar"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"/>
+        android:layout_below="@id/linearLayout"
+        android:layout_marginTop="20dp"
+
+        />
 
     <ImageView
         android:id="@+id/image"

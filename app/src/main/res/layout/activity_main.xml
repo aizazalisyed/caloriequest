@@ -209,7 +209,7 @@
                     android:layout_marginTop="25dp"
                     tools:listitem="@layout/nutrition_record_rv_item"
                     android:visibility="gone"
-                    android:focusable="false"
+                    android:nestedScrollingEnabled="false"
                     />
 
             </RelativeLayout>
@@ -288,6 +288,7 @@
                     tools:listitem="@layout/nutrition_record_rv_item"
                     android:visibility="gone"
                     android:focusable="false"
+                    android:nestedScrollingEnabled="false"
                     />
 
             </RelativeLayout>
@@ -366,7 +367,7 @@
                     android:layout_marginTop="25dp"
                     tools:listitem="@layout/nutrition_record_rv_item"
                     android:visibility="gone"
-                    android:focusable="false"
+                    android:nestedScrollingEnabled="false"
                     />
 
             </RelativeLayout>

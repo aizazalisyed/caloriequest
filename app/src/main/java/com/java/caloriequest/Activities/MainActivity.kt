@@ -1,7 +1,10 @@
 package com.java.caloriequest.Activities
 
 import NutritionDataAdapter
+import android.app.AlarmManager
 import android.app.AlertDialog
+import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
@@ -25,7 +28,6 @@ import com.java.caloriequest.R
 import com.java.caloriequest.databinding.ActivityMainBinding
 import com.java.caloriequest.model.ImageSegmentationResponse
 import com.java.caloriequest.model.NutritionItem
-import com.java.caloriequest.model.NutritionalInfoResponse
 import com.java.caloriequest.model.TotalNutritionData
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -35,6 +37,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
 import java.io.FileOutputStream
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -48,8 +51,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var nutritionAdapterLunch: NutritionDataAdapter
     private lateinit var nutritionAdapterDinner: NutritionDataAdapter
     var maxCalories : Int? = null
-
     lateinit var category : String
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -191,6 +194,7 @@ class MainActivity : AppCompatActivity() {
         retrieveTotalNutritionData()
     }
 
+
     private fun retrieveTotalNutritionData() {
         val currentUser = auth.currentUser
         if (currentUser != null) {
@@ -209,11 +213,14 @@ class MainActivity : AppCompatActivity() {
                             val totalProtein = totalNutritionData.totalProtein
                             val totalFats = totalNutritionData.totalFats
                             val totalCarbs = totalNutritionData.totalCarbs
+                            val cupsOfWater = totalNutritionData.waterIntake
 
                             binding.cycleLengthCircularProgress.setProgress(totalCalories, maxCalories!!.toDouble())
-                            binding.protienTextView.text = totalProtein.toString()
-                            binding.fatsTextView.text = totalFats.toString()
-                            binding.carbsTextView.text = totalCarbs.toString()
+                            binding.protienTextView.text = totalProtein.toString() + " protein"
+                            binding.fatsTextView.text = totalFats.toString() + " fats"
+                            binding.carbsTextView.text = totalCarbs.toString() + " carbs"
+                            binding.cupsTextView.text = cupsOfWater.toString() + " cups"
+                            binding.waterCalTextView.text = cupsOfWater.toString() + " cups"
 
                             // Update your UI or perform any other actions with the data
                         } else {
@@ -262,7 +269,6 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun showWaterIntakeDialog() {
-
         val dialogView = LayoutInflater.from(this).inflate(R.layout.water_intake_dialogue, null)
         val builder = AlertDialog.Builder(this)
         builder.setView(dialogView)
@@ -273,19 +279,94 @@ class MainActivity : AppCompatActivity() {
         val waterIntakeEditText = dialogView.findViewById<EditText>(R.id.waterIntakeEditText)
         val confirm_button = dialogView.findViewById<Button>(R.id.confirm_button)
 
+        confirm_button.setOnClickListener {
+            val waterIntakeText = waterIntakeEditText.text.toString()
 
+            if (waterIntakeText.isEmpty()) {
+                Toast.makeText(this, "Kindly Enter Number Of Glasses", Toast.LENGTH_SHORT).show()
+            } else {
+                try {
+                    val waterIntake = waterIntakeText.toLong()
+                    // Get the current user's UID
+                    val currentUser = auth.currentUser
+                    if (currentUser != null) {
+                        val userUid = currentUser.uid
+                        val userCollection = firestore.collection("users").document(userUid)
 
-       confirm_button.setOnClickListener {
+                        // Check if the document exists
+                        userCollection.get()
+                            .addOnCompleteListener { task ->
+                                if (task.isSuccessful) {
+                                    val documentSnapshot = task.result
+                                    if (documentSnapshot != null && documentSnapshot.exists()) {
+                                        // Document exists, update the water intake value
+                                        val currentWaterIntake = documentSnapshot.getLong("waterIntake") ?: 0
+                                        val newWaterIntake = currentWaterIntake + waterIntake
 
-           if (waterIntakeEditText.text.isEmpty()){
-               Toast.makeText(this, "Kindly Enter Number Of Glasses", Toast.LENGTH_SHORT).show()
-           }
-           else{
-               dialog.dismiss()
-           }
+                                        // Update the document with the new water intake value
+                                        userCollection.update("waterIntake", newWaterIntake)
+                                            .addOnSuccessListener {
+                                                Toast.makeText(
+                                                    this@MainActivity,
+                                                    "Water intake updated successfully",
+                                                    Toast.LENGTH_SHORT
+                                                ).show()
+                                                dialog.dismiss()
 
+                                                // Update the TextViews with the new water intake value
+                                                binding.cupsTextView.text = newWaterIntake.toString() + " cups"
+                                                binding.waterCalTextView.text = newWaterIntake.toString() + " cups"
+                                            }
+                                            .addOnFailureListener { e ->
+                                                Toast.makeText(
+                                                    this@MainActivity,
+                                                    "Failed to update water intake",
+                                                    Toast.LENGTH_SHORT
+                                                ).show()
+                                            }
+                                    } else {
+                                        // Document doesn't exist, create a new document
+                                        val userData = hashMapOf(
+                                            "waterIntake" to waterIntake
+                                        )
+                                        userCollection.set(userData)
+                                            .addOnSuccessListener {
+                                                Toast.makeText(
+                                                    this@MainActivity,
+                                                    "Water intake saved successfully",
+                                                    Toast.LENGTH_SHORT
+                                                ).show()
+                                                dialog.dismiss()
+
+                                                // Update the TextViews with the new water intake value
+                                                binding.cupsTextView.text = waterIntake.toString() + " cups"
+                                                binding.waterCalTextView.text = waterIntake.toString() + " cups"
+                                            }
+                                            .addOnFailureListener { e ->
+                                                Toast.makeText(
+                                                    this@MainActivity,
+                                                    "Failed to save water intake",
+                                                    Toast.LENGTH_SHORT
+                                                ).show()
+                                            }
+                                    }
+                                }
+                            }
+                    } else {
+                        Toast.makeText(
+                            this@MainActivity,
+                            "You need to be logged in to save water intake data.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                } catch (e: NumberFormatException) {
+                    Toast.makeText(this, "Invalid input. Please enter a valid number.", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
+
+
 
 
     private fun calculateMaintenanceCalories(age: Int, heightFeet: Int, heightInches: Int, weight: Float, activityLevelFactor: Float): Int {

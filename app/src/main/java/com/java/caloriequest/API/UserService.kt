@@ -1,9 +1,9 @@
 package com.java.caloriequest.API
 
 
+import com.java.caloriequest.model.FoodInfo
 import com.java.caloriequest.model.ImageSegmentationResponse
 import com.java.caloriequest.model.NutritionResponse
-import com.java.caloriequest.model.NutritionalInfoResponse
 import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.http.*
@@ -28,6 +28,6 @@ interface UserService {
     fun getNutritionalInfo(
         @Body request: NutritionalInfoRequest,
         @Header("Authorization") authorization: String
-    ): Call<NutritionalInfoResponse>
+    ): Call<FoodInfo>
 
 }

@@ -49,4 +49,8 @@ class NutritionAdapter(private val nutritionList: MutableList<NutritionFacts>) :
         nutritionList.addAll(newData)
         notifyDataSetChanged()
     }
+
+    fun getData(): List<NutritionFacts> {
+        return nutritionList
+    }
 }
