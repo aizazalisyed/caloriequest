@@ -25,7 +25,6 @@ class RetrofitClient {
             .client(okHttpClient)
             .baseUrl(baseUrl)
             .build()
-
     }
 
 

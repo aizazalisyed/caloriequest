@@ -12,15 +12,20 @@ import android.graphics.Bitmap
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.content.ContextCompat
+import androidx.core.view.GravityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.java.caloriequest.API.NutritionalInfoRequest
 import com.java.caloriequest.API.RetrofitClient
@@ -38,9 +43,11 @@ import retrofit2.Response
 import java.io.File
 import java.io.FileOutputStream
 import java.util.*
+import kotlin.properties.Delegates
 
 class MainActivity : AppCompatActivity() {
 
+    private var maintenanceCalories by Delegates.notNull<Int>()
     private lateinit var binding: ActivityMainBinding
     private lateinit var sharedPreferences: SharedPreferences
     private val CAMERA_REQUEST_CODE = 123
@@ -62,6 +69,17 @@ class MainActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
         firestore = FirebaseFirestore.getInstance()
 
+
+        binding.sidenavigationicon.setOnClickListener {
+            showAddExerciseDialog()
+        }
+
+        // Display the user's name and email in the navigation header
+        val user: FirebaseUser? = auth.currentUser
+        if (user != null) {
+            binding.userName.text = "Hi, ${user.displayName}"
+        }
+
         sharedPreferences = getSharedPreferences("CaloriesPrefs", MODE_PRIVATE)
         val age = sharedPreferences.getInt("age", 0)
         val heightFeet = sharedPreferences.getInt("selectedFeet", 0)
@@ -69,7 +87,7 @@ class MainActivity : AppCompatActivity() {
         val weight = sharedPreferences.getFloat("weight", 0f)
         val activityLevelFactor = sharedPreferences.getFloat("activityLevelFactor", 1.55f) // Default to moderate activity level
 
-        val maintenanceCalories = calculateMaintenanceCalories(age, heightFeet, heightInches, weight, activityLevelFactor)
+         maintenanceCalories = calculateMaintenanceCalories(age, heightFeet, heightInches, weight, activityLevelFactor)
 
         binding.calTextView.text = "/ $maintenanceCalories cal"
 
@@ -191,9 +209,68 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        // Check if totalCalories is greater than maintenanceCalories
+
         retrieveTotalNutritionData()
     }
 
+    private fun showAddExerciseDialog() {
+        val dialogView = LayoutInflater.from(this).inflate(R.layout.add_exercise_dialog, null)
+        val builder = AlertDialog.Builder(this)
+        builder.setView(dialogView)
+
+        val dialog = builder.create()
+        dialog.show()
+
+        val caloriesEditText = dialogView.findViewById<EditText>(R.id.caloriesEditText)
+        val saveButton = dialogView.findViewById<Button>(R.id.saveButton)
+
+        saveButton.setOnClickListener {
+            val caloriesText = caloriesEditText.text.toString()
+            if (caloriesText.isNotEmpty()) {
+                try {
+                    val enteredCalories = caloriesText.toInt()
+                    val currentUser = auth.currentUser
+                    if (currentUser != null) {
+                        val userUid = currentUser.uid
+                        val userCollection = firestore.collection("users").document(userUid)
+
+                        userCollection.get()
+                            .addOnSuccessListener { documentSnapshot ->
+                                if (documentSnapshot.exists()) {
+                                    val totalNutritionData = documentSnapshot.toObject(TotalNutritionData::class.java)
+                                    if (totalNutritionData != null) {
+                                        val currentCalories = totalNutritionData.totalCalories
+                                        val updatedCalories = currentCalories - enteredCalories
+
+                                        Log.d("upatedCalories", updatedCalories.toString())
+
+                                        // Update the totalCalories in Firebase
+                                        userCollection.update("totalCalories", updatedCalories)
+                                            .addOnSuccessListener {
+                                                Toast.makeText(this@MainActivity, "Calories updated successfully", Toast.LENGTH_SHORT).show()
+
+                                                // Update the UI with the new totalCalories
+                                                binding.cycleLengthCircularProgress.setProgress(updatedCalories, maxCalories!!.toDouble())
+                                            }
+                                            .addOnFailureListener { e ->
+                                                Toast.makeText(this@MainActivity, "Failed to update calories", Toast.LENGTH_SHORT).show()
+                                            }
+                                    }
+                                }
+                            }
+                    } else {
+                        Toast.makeText(this, "You need to be logged in to update calories.", Toast.LENGTH_SHORT).show()
+                    }
+                } catch (e: NumberFormatException) {
+                    Toast.makeText(this, "Invalid input. Please enter a valid number.", Toast.LENGTH_SHORT).show()
+                }
+            } else {
+                Toast.makeText(this, "Please enter the calories value.", Toast.LENGTH_SHORT).show()
+            }
+            dialog.dismiss()
+        }
+    }
 
     private fun retrieveTotalNutritionData() {
         val currentUser = auth.currentUser
@@ -201,39 +278,49 @@ class MainActivity : AppCompatActivity() {
             val userUid = currentUser.uid
             val userCollection = firestore.collection("users").document(userUid)
 
-            // Fetch the existing total nutrition data from Firestore
-            userCollection.get()
-                .addOnSuccessListener { documentSnapshot ->
-                    if (documentSnapshot.exists()) {
-                        val totalNutritionData = documentSnapshot.toObject(TotalNutritionData::class.java)
-                        if (totalNutritionData != null) {
-                            // Here, you can use the totalNutritionData as needed
-                            // For example, you can access its properties like this:
-                            val totalCalories = totalNutritionData.totalCalories
-                            val totalProtein = totalNutritionData.totalProtein
-                            val totalFats = totalNutritionData.totalFats
-                            val totalCarbs = totalNutritionData.totalCarbs
-                            val cupsOfWater = totalNutritionData.waterIntake
+            // Add a snapshot listener to listen for changes in the document
+            userCollection.addSnapshotListener { documentSnapshot, error ->
+                if (error != null) {
+                    // Handle the error
+                    Log.e("FirestoreListener", "Listen failed: $error")
+                    return@addSnapshotListener
+                }
 
-                            binding.cycleLengthCircularProgress.setProgress(totalCalories, maxCalories!!.toDouble())
-                            binding.protienTextView.text = totalProtein.toString() + " protein"
-                            binding.fatsTextView.text = totalFats.toString() + " fats"
-                            binding.carbsTextView.text = totalCarbs.toString() + " carbs"
-                            binding.cupsTextView.text = cupsOfWater.toString() + " cups"
-                            binding.waterCalTextView.text = cupsOfWater.toString() + " cups"
+                if (documentSnapshot != null && documentSnapshot.exists()) {
+                    val totalNutritionData = documentSnapshot.toObject(TotalNutritionData::class.java)
+                    if (totalNutritionData != null) {
+                        // Update your UI with the new data
+                        val totalCalories = totalNutritionData.totalCalories
+                        val totalProtein = totalNutritionData.totalProtein
+                        val totalFats = totalNutritionData.totalFats
+                        val totalCarbs = totalNutritionData.totalCarbs
+                        val cupsOfWater = totalNutritionData.waterIntake
 
-                            // Update your UI or perform any other actions with the data
-                        } else {
-                            // Handle the case where totalNutritionData is null
+                        binding.cycleLengthCircularProgress.setProgress(totalCalories, maxCalories!!.toDouble())
+                        binding.protienTextView.text = totalProtein.toString() + " protein"
+                        binding.fatsTextView.text = totalFats.toString() + " fats"
+                        binding.carbsTextView.text = totalCarbs.toString() + " carbs"
+                        binding.cupsTextView.text = cupsOfWater.toString() + " cups"
+                        binding.waterCalTextView.text = cupsOfWater.toString() + " cups"
+
+                        if (totalCalories > maintenanceCalories) {
+                            // Create a warning message dialogue
+                            val builder = AlertDialog.Builder(this)
+                            builder.setTitle("Warning")
+                            builder.setMessage("You have exceeded your maintenance calories. Consider doing some workout to burn the excess calories.")
+
+                            builder.setPositiveButton("OK") { dialog, _ ->
+                                dialog.dismiss()
+                            }
+
+                            val warningDialog = builder.create()
+                            warningDialog.show()
                         }
-                    } else {
-                        // Document doesn't exist, handle this case based on your requirements
                     }
+                } else {
+                    // Handle the case where the document doesn't exist
                 }
-                .addOnFailureListener { e ->
-                    // Handle failure to fetch data
-                    // You can add a Toast message or other error handling here
-                }
+            }
         } else {
             // User is not logged in, handle this case based on your requirements
         }
@@ -263,10 +350,10 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, QueryNutritionActivity::class.java)
             intent.putExtra("category", category) // Pass the category string
             startActivity(intent)
+            finish()
             dialog.dismiss()
         }
     }
-
 
     private fun showWaterIntakeDialog() {
         val dialogView = LayoutInflater.from(this).inflate(R.layout.water_intake_dialogue, null)
@@ -366,9 +453,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
-
-
     private fun calculateMaintenanceCalories(age: Int, heightFeet: Int, heightInches: Int, weight: Float, activityLevelFactor: Float): Int {
         val totalInches = heightFeet * 12 + heightInches
         val bmr: Double
@@ -383,9 +467,6 @@ class MainActivity : AppCompatActivity() {
         maxCalories = maintenanceCalories
         return maintenanceCalories
     }
-
-
-
 
     private fun requestCameraPermission() {
         if (shouldShowRequestPermissionRationale(android.Manifest.permission.CAMERA)) {
