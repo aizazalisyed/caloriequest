@@ -22,6 +22,13 @@
         android:theme="@style/Theme.CalorieQuest"
         tools:targetApi="31">
         <activity
+            android:name=".EditProfileActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".Activities.ImageNutritionActivity"
             android:exported="false">
             <meta-data

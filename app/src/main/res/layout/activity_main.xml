@@ -53,6 +53,17 @@
             </ImageView>
 
 
+            <ImageView
+                android:id="@+id/editProfileButton"
+                android:layout_width="30dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_baseline_person_24"
+                app:tint="@color/orange"
+                android:layout_toStartOf="@id/sidenavigationicon"
+                android:layout_marginTop="5dp"
+                />
+
+
         </RelativeLayout>
 
     <ScrollView

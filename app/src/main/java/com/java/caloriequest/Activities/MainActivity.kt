@@ -29,6 +29,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.java.caloriequest.API.NutritionalInfoRequest
 import com.java.caloriequest.API.RetrofitClient
+import com.java.caloriequest.EditProfileActivity
 import com.java.caloriequest.R
 import com.java.caloriequest.databinding.ActivityMainBinding
 import com.java.caloriequest.model.ImageSegmentationResponse
@@ -69,6 +70,10 @@ class MainActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
         firestore = FirebaseFirestore.getInstance()
 
+
+        binding.editProfileButton.setOnClickListener {
+            startActivity(Intent(this,EditProfileActivity::class.java))
+        }
 
         binding.sidenavigationicon.setOnClickListener {
             showAddExerciseDialog()

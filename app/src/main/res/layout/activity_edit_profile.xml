@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    >
+
+    <TextView
+        android:id="@+id/techsaLogo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Update Profile"
+        android:textStyle="bold"
+        android:textColor="@color/orange"
+        style="@style/ThemeOverlay.Material3.AutoCompleteTextView.OutlinedBox"
+        android:textSize="25sp"
+        android:translationZ="5dp"
+        android:layout_marginTop="140dp"
+        android:layout_centerHorizontal="true"
+        />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/emailTextField"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter New Email"
+        android:textColorHint="@color/grayish_blue"
+        android:layout_below="@id/techsaLogo"
+        android:layout_centerHorizontal="true"
+        app:boxStrokeColor="@color/grayish_blue"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        app:startIconDrawable="@drawable/ic_baseline_person_24"
+        app:startIconTint="@color/grayish_blue"
+        app:boxCornerRadiusBottomEnd="8dp"
+        app:boxCornerRadiusBottomStart="8dp"
+        app:boxCornerRadiusTopEnd="8dp"
+        app:boxCornerRadiusTopStart="8dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="20dp"
+        >
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/emailEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/userNameTextField"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter New User Name"
+        android:textColorHint="@color/grayish_blue"
+        android:layout_below="@id/emailTextField"
+        android:layout_centerHorizontal="true"
+        app:boxStrokeColor="@color/grayish_blue"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        app:startIconDrawable="@drawable/ic_baseline_email_24"
+        app:startIconTint="@color/grayish_blue"
+        app:boxCornerRadiusBottomEnd="8dp"
+        app:boxCornerRadiusBottomStart="8dp"
+        app:boxCornerRadiusTopEnd="8dp"
+        app:boxCornerRadiusTopStart="8dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="20dp"
+        >
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/userNameEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_below="@id/userNameTextField"
+        android:layout_marginTop="10dp"
+        android:id="@+id/passwordTextField"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter Old Password"
+        android:textColorHint="@color/grayish_blue"
+        android:layout_centerHorizontal="true"
+        app:boxStrokeColor="@color/grayish_blue"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        app:startIconDrawable="@drawable/ic_baseline_lock_open_24"
+        app:startIconTint="@color/grayish_blue"
+        app:endIconDrawable="@drawable/ic_baseline_remove_red_eye_24"
+        app:endIconMode="password_toggle"
+        app:endIconTint="@color/grayish_blue"
+        app:boxCornerRadiusBottomEnd="8dp"
+        app:boxCornerRadiusBottomStart="8dp"
+        app:boxCornerRadiusTopEnd="8dp"
+        app:boxCornerRadiusTopStart="8dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        >
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/passwordEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_below="@id/passwordTextField"
+        android:layout_marginTop="10dp"
+        android:id="@+id/newPasswordTextField"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter New Password"
+        android:textColorHint="@color/grayish_blue"
+        android:layout_centerHorizontal="true"
+        app:boxStrokeColor="@color/grayish_blue"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        app:startIconDrawable="@drawable/ic_baseline_lock_open_24"
+        app:startIconTint="@color/grayish_blue"
+        app:endIconDrawable="@drawable/ic_baseline_remove_red_eye_24"
+        app:endIconMode="password_toggle"
+        app:endIconTint="@color/grayish_blue"
+        app:boxCornerRadiusBottomEnd="8dp"
+        app:boxCornerRadiusBottomStart="8dp"
+        app:boxCornerRadiusTopEnd="8dp"
+        app:boxCornerRadiusTopStart="8dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        >
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/newPasswordEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/saveButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/newPasswordTextField"
+        android:layout_marginTop="40dp"
+        android:text="Save Changes"
+        android:textSize="14sp"
+        android:textColor="@color/black"
+        android:layout_centerHorizontal="true"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+        />
+</RelativeLayout>
