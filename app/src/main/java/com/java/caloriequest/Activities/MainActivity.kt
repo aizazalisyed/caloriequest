@@ -71,6 +71,13 @@ class MainActivity : AppCompatActivity() {
         firestore = FirebaseFirestore.getInstance()
 
 
+        binding.signout.setOnClickListener {
+
+            auth.signOut()
+            finish()
+            startActivity(Intent(this, LoginActivity::class.java))
+        }
+
         binding.editProfileButton.setOnClickListener {
             startActivity(Intent(this,EditProfileActivity::class.java))
         }
