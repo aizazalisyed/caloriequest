@@ -32,6 +32,23 @@
                     // Show progress bar while signing up
                     binding.progressBar.visibility = View.VISIBLE
 
+
+                    // Validate password using regex
+                    if (!isValidPassword(password)) {
+                        binding.warningMessage.visibility = View.VISIBLE
+                        binding.progressBar.visibility = View.GONE
+                        return@setOnClickListener
+                    } else {
+                        binding.warningMessage.visibility = View.GONE
+                    }
+
+                    // Validate email using regex
+                    if (!isValidEmail(email)) {
+                        binding.progressBar.visibility = View.GONE
+                        Toast.makeText(this@SignUpActivity, "Invalid Email Address", Toast.LENGTH_SHORT).show()
+                        return@setOnClickListener
+                    }
+
                     auth.createUserWithEmailAndPassword(email, password)
                         .addOnCompleteListener(this) { task ->
                             // Hide progress bar
@@ -80,4 +97,17 @@
         fun showToast(message : String){
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
         }
+
+        private fun isValidEmail(email: String): Boolean {
+            val emailRegex = "^[A-Za-z](.*)([@]{1})(.{1,})(\\.)(.{1,})"
+            return email.matches(emailRegex.toRegex())
+        }
+
+
+        private fun isValidPassword(password: String): Boolean {
+            // Password must be at least 8 characters long and contain at least one digit and one special character
+            val passwordRegex = "^(?=.*[0-9])(?=.*[!@#\$%^&*])(.{8,})"
+            return password.matches(passwordRegex.toRegex())
+        }
+
     }

@@ -72,7 +72,7 @@ class ImageNutritionActivity : AppCompatActivity() {
         val imagePart = MultipartBody.Part.createFormData("image", imageFile.name, imageRequestBody)
 
         val userService = RetrofitClient().getUserService2() // Use your Retrofit service
-        val authorizationHeader = "Bearer 6db79db6437f0ed24049db661adad2720ec209de" // Replace with your actual API token
+        val authorizationHeader = "Bearer 6c6a5bb5b421aa2ed2bccb382810d035d3f81535" // Replace with your actual API token
         userService?.segmentImage(imagePart, authorizationHeader)?.enqueue(
             object : Callback<ImageSegmentationResponse> {
                 override fun onResponse(
@@ -104,7 +104,7 @@ class ImageNutritionActivity : AppCompatActivity() {
         Log.d("ImageNutritionActivity", "getNutritionalInfo called with imageId: $imageId")
         val userService = RetrofitClient().getUserService2() // Use your Retrofit service
         val nutritionalInfoRequest = NutritionalInfoRequest(imageId)
-        val authorizationHeader = "Bearer 6db79db6437f0ed24049db661adad2720ec209de" // Replace with your actual API token
+        val authorizationHeader = "Bearer 6c6a5bb5b421aa2ed2bccb382810d035d3f81535" // Replace with your actual API token
 
         userService?.getNutritionalInfo(nutritionalInfoRequest, authorizationHeader)?.enqueue(
             object : Callback<FoodInfo> {
